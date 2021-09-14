@@ -2,7 +2,8 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <h1> {{this.$store.state.pur_str}} </h1>
+    <h1 class="title"> {{this.$store.state.pur_str}} </h1>
+    <button class="button is-large">Bulma button</button>
   </div>
 </template>
 
