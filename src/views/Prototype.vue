@@ -4,24 +4,22 @@
       <div class="title">
         Did you...
       </div>
-      <transition-group name="fade" tag="section">
-        <div v-for="action in actions" :key="action.index">
-          <div class="columns is-centered" :id="action">
-            <div class="column is-half subtitle">{{action}}</div>
+      <div v-for="action in actions" :key="action.index">
+        <div class="columns is-centered" :id="action">
+          <div class="column is-half subtitle">{{action}}</div>
             <div class="column field has-addons"
-             v-for="(val, key) in checkOptions" :key="key">
+              v-for="(val, key) in checkOptions" :key="key">
               <button class="button is-primary is-light"
               :name="action" :value="val"
               @click=goNext(action,val,$event)>
               {{val}}
               </button>
             </div>
-          </div>
         </div>
-      </transition-group>
+      </div>
     </div>
   </section>
-  <section class="section" v-if="consSection">
+  <section class="section" ref="cons" v-if="consSection">
     <div class="container">
       <div class="title">
         Then you...
@@ -33,7 +31,7 @@
       </div>
     </div>
   </section>
-  <section class="section" v-if="endStatement">
+  <section class="section" ref="statement" v-if="endStatement">
     <div class="container">
       <div v-for="question in eachQuestion" v-bind:key="question.index"
        class="title">
@@ -67,8 +65,7 @@ export default {
       const filtered = this.actions.filter((x) => x !== action);
       if (selection === 'yes') {
         filtered.map((x) => document.getElementById(x).classList.add('is-hidden'));
-        this.consSection = true;
-        this.endStatement = true;
+        this.fade('this.show()', 'fadein');
         const consList = this.consequences.join(' and ');
         this.eachQuestion.push = ({ action, selection, consList });
         console.log(this.eachQuestion);
@@ -78,10 +75,16 @@ export default {
         this.endStatement = false;
       }
     },
+    async show() {
+      this.consSection = true;
+      this.endStatement = true;
+    },
+    async fade(showOrHide, whichFade) {
+      await this.show();
+      this.$refs.cons.classList.add(whichFade);
+      this.$refs.statement.classList.add(whichFade);
+    },
   },
-//   mounted() {
-//     this.goNext(this.actions, 0);
-//   },
 };
 </script>
 
