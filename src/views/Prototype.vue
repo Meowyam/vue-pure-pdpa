@@ -31,6 +31,14 @@
       </div>
     </div>
   </section>
+  <section class="section" v-if="endStatement">
+    <div class="container">
+      <div v-for="question in eachQuestion" v-bind:key="question.index"
+       class="title">
+         You {{question.action}} and {{question.consList}}
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -40,24 +48,30 @@ export default {
       actions: ['walk', 'run', 'jog'],
       consequences: ['sing'],
       checkOptions: ['yes', 'no', 'don\'t know'],
-      eachQuestion: [],
+      eachQuestion: {},
       i: Number,
       checked: [],
       act: [],
       consSection: false,
+      endStatement: false,
     };
   },
   methods: {
     goNext(action, selection) {
       console.log(action, selection);
-      this.eachQuestion.push = ([action, selection]);
-      console.log(this.eachQuestion);
+      this.eachQuestion.push = ({ action, selection });
       const filtered = this.actions.filter((x) => x !== action);
       if (selection === 'yes') {
         filtered.map((x) => document.getElementById(x).classList.add('is-hidden'));
         this.consSection = true;
+        this.endStatement = true;
+        const consList = this.consequences.join(' and ');
+        this.eachQuestion.push = ({ action, selection, consList });
+        console.log(this.eachQuestion);
       } else {
         filtered.map((x) => document.getElementById(x).classList.remove('is-hidden'));
+        this.consSection = false;
+        this.endStatement = false;
       }
     },
   },
