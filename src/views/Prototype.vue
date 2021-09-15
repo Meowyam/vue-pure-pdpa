@@ -4,19 +4,21 @@
       <div class="title">
         Did you...
       </div>
-      <div v-for="action in actions" v-bind:key="action.index">
-        <div class="columns is-centered" :id="action">
-          <div class="column is-half subtitle">{{action}}</div>
-          <div class="column field has-addons"
-          v-for="(val, key) in checkOptions" :key="key">
-            <label class="radio">
-              <input type="radio" :name="action" :value="val"
-              @change=goNext(action,val) />
+      <transition-group name="fade" tag="section">
+        <div v-for="action in actions" :key="action.index">
+          <div class="columns is-centered" :id="action">
+            <div class="column is-half subtitle">{{action}}</div>
+            <div class="column field has-addons"
+             v-for="(val, key) in checkOptions" :key="key">
+              <button class="button is-primary is-light"
+              :name="action" :value="val"
+              @click=goNext(action,val,$event)>
               {{val}}
-            </label>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </transition-group>
     </div>
   </section>
   <section class="section" v-if="consSection">
@@ -24,7 +26,7 @@
       <div class="title">
         Then you...
       </div>
-      <div v-for="consequence in consequences" v-bind:key="consequence.index">
+      <div v-for="consequence in consequences" :key="consequence.index">
         <div class="subtitle">
           {{consequence}}
         </div>
@@ -54,12 +56,14 @@ export default {
       act: [],
       consSection: false,
       endStatement: false,
+      chosen: false,
     };
   },
   methods: {
-    goNext(action, selection) {
+    goNext(action, selection, e) {
       console.log(action, selection);
       this.eachQuestion.push = ({ action, selection });
+      e.target.classList.remove('is-light');
       const filtered = this.actions.filter((x) => x !== action);
       if (selection === 'yes') {
         filtered.map((x) => document.getElementById(x).classList.add('is-hidden'));
