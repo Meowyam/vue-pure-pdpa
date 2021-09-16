@@ -4,7 +4,7 @@
       <div class="title">
         Did you...
       </div>
-      <div v-for="action in actions" :key="action.index">
+      <div v-for="(action, index) in actions" :key="index">
         <div class="columns is-centered" :id="action">
           <div class="column is-half subtitle">{{action}}</div>
             <div class="column field has-addons"
@@ -33,9 +33,8 @@
   </section>
   <section class="section" ref="statement" v-if="endStatement">
     <div class="container">
-      <div v-for="question in eachQuestion" v-bind:key="question.index"
-       class="title">
-         You {{question.action}} and {{question.consList}}
+      <div v-for="(question, index) in eachQuestion" v-bind:key="index" class="title">
+        You {{question.action}} and {{question.consList}}
       </div>
     </div>
   </section>
@@ -48,7 +47,7 @@ export default {
       actions: ['walk', 'run', 'jog'],
       consequences: ['sing'],
       checkOptions: ['yes', 'no', 'don\'t know'],
-      eachQuestion: {},
+      eachQuestion: [],
       i: Number,
       checked: [],
       act: [],
@@ -59,16 +58,20 @@ export default {
   },
   methods: {
     goNext(action, selection, e) {
-      console.log(action, selection);
-      this.eachQuestion.push = ({ action, selection });
+      // console.log(action, selection);
+      const isExist = this.eachQuestion.filter((qn) => qn.action === action);
+      (console.log(isExist));
+      // if (isExist) {
+      //   isExist.action.classList.add('is-light');
+      // }
       e.target.classList.remove('is-light');
       const filtered = this.actions.filter((x) => x !== action);
       if (selection === 'yes') {
         filtered.map((x) => document.getElementById(x).classList.add('is-hidden'));
         this.fade('this.show()', 'fadein');
         const consList = this.consequences.join(' and ');
-        this.eachQuestion.push = ({ action, selection, consList });
-        console.log(this.eachQuestion);
+        const tempQuestion = { action, selection, consList };
+        this.eachQuestion.push(tempQuestion);
       } else {
         filtered.map((x) => document.getElementById(x).classList.remove('is-hidden'));
         this.consSection = false;
