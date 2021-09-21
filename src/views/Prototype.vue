@@ -57,25 +57,34 @@ export default {
     };
   },
   methods: {
-    goNext(action, selection, e) {
-      // console.log(action, selection);
+    checkExists(action, e) {
       const isExist = this.eachQuestion.filter((qn) => qn.action === action);
-      (console.log(isExist));
-      // if (isExist) {
-      //   isExist.action.classList.add('is-light');
-      // }
+      const getIdx = this.eachQuestion.findIndex((qn) => qn.action === action);
+      if (isExist) {
+        console.log(action, ' exists');
+        console.log(this.eachQuestion[getIdx]);
+        this.eachQuestion.splice(getIdx, 1);
+        document.getElementsByName(action).forEach((btn) => btn.classList.add('is-light'));
+      }
       e.target.classList.remove('is-light');
+    },
+    goNext(action, selection, e) {
+      console.log(action, selection);
       const filtered = this.actions.filter((x) => x !== action);
       if (selection === 'yes') {
         filtered.map((x) => document.getElementById(x).classList.add('is-hidden'));
         this.fade('this.show()', 'fadein');
         const consList = this.consequences.join(' and ');
-        const tempQuestion = { action, selection, consList };
-        this.eachQuestion.push(tempQuestion);
+        this.checkExists(action, e);
+        this.eachQuestion.push({ action, selection, consList });
+        console.log('yes ', this.eachQuestion);
       } else {
         filtered.map((x) => document.getElementById(x).classList.remove('is-hidden'));
         this.consSection = false;
         this.endStatement = false;
+        this.checkExists(action, e);
+        this.eachQuestion.push({ action, selection });
+        console.log('no ', this.eachQuestion);
       }
     },
     async show() {
