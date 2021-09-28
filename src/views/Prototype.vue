@@ -1,6 +1,7 @@
 <template>
   <section class="section">
     <div class="container">
+      {{example1}}
       <div class="title">
         Did you...
       </div>
@@ -41,11 +42,14 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields';
+
 export default {
+
   data() {
     return {
-      actions: ['walk', 'run', 'jog'],
-      consequences: ['sing'],
+      // example1:  ['walk', 'run', 'jog'],
+      // consequences: ['sing'],
       checkOptions: ['yes', 'no', 'don\'t know'],
       eachQuestion: [],
       i: Number,
@@ -55,6 +59,35 @@ export default {
       endStatement: false,
       chosen: false,
     };
+  },
+  computed: {
+    ...mapFields(['pur_str', 'example1']),
+    actions() {
+      if (this.example1[Object.keys(this.example1)[0]].value0 === 'all of') {
+        // return this.example1[Object.keys(this.example1)[1]];
+        const allActions = [];
+        this.example1[Object.keys(this.example1)[1]].forEach((input) => {
+          if (typeof (input.value0) !== 'object' && (input.value0) !== null) {
+            allActions.push(input.value0);
+          }
+        });
+        return allActions;
+        //  );
+      }
+      return [];
+    },
+    consequences() {
+      const allConsq = [];
+      const checkConsq = (this.example1[Object.keys(this.example1)[1]]);
+      checkConsq.forEach((input) => {
+        if (typeof (input.value0) === 'object' && (input.value0) !== null) {
+          input.value1.forEach(((consq) => {
+            allConsq.push(consq.value0);
+          }));
+        }
+      });
+      return allConsq;
+    },
   },
   methods: {
     checkExists(action, e) {

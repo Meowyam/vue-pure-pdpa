@@ -14,3 +14,4 @@ main = do
   log "🍝"
   launchAff_ $ runSpec [consoleReporter] do
     IndexTest.spec
+-- https://purescript-spec.github.io/purescript-spec/
