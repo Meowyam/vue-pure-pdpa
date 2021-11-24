@@ -5,4 +5,5 @@ import store from './store';
 
 require('@/assets/main.scss');
 
-createApp(App).use(store).use(router).mount('#app');
+createApp(App).use(store).use(router)
+  .mount('#app');

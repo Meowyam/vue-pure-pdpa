@@ -29,16 +29,7 @@ export default {
     addObject(target, obj) {
       return Object.assign(target, obj);
     },
-    reformatdata(data) {
-      const viewChild = (data.andOr.children.filter((child) => child.shouldView === 'View'))[0].andOr;
-      const getObject = { ...viewChild };
-      const newTree = data;
-      const newChildren = data.andOr.children
-        .filter((child) => child.shouldView === 'Ask');
-      newChildren.map((leaf) => this.addObject(leaf.andOr, getObject));
-      newTree.andOr.children = newChildren;
-      return newTree;
-    },
+
     init(data) {
       // this.reformatdata(data);
 
@@ -49,7 +40,8 @@ export default {
         top: 10, right: 15, bottom: 10, left: 100,
       };
       const width = this.width - margin.left - margin.right;
-      const height = (nodes.children.length * 50) - margin.top - margin.bottom;
+      const height = (nodes.children.length * (width / nodes.children.length))
+      - margin.top - margin.bottom;
 
       console.log(nodes);
 
